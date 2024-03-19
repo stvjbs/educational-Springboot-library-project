@@ -6,7 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import org.springframework.web.bind.annotation.*;
-import ru.gb.springbootlesson3.controllers.Requests.BookAddRequest;
+import ru.gb.springbootlesson3.controllers.dto.BookDTO;
 import ru.gb.springbootlesson3.entity.Book;
 import ru.gb.springbootlesson3.services.BookService;
 
@@ -34,7 +34,7 @@ public class BookController {
     }
 
     @PostMapping("addBook")
-    public ResponseEntity<Book> addBook(@RequestBody BookAddRequest bookAddRequest){
-        return ResponseEntity.status(HttpStatus.CREATED).body(bookService.addBook(bookAddRequest));
+    public ResponseEntity<Book> addBook(@RequestBody BookDTO bookDTO){
+        return ResponseEntity.status(HttpStatus.CREATED).body(bookService.addBook(bookDTO));
     }
 }

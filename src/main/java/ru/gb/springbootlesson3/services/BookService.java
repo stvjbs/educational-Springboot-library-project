@@ -2,7 +2,7 @@ package ru.gb.springbootlesson3.services;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
-import ru.gb.springbootlesson3.controllers.Requests.BookAddRequest;
+import ru.gb.springbootlesson3.controllers.dto.BookDTO;
 import ru.gb.springbootlesson3.entity.Book;
 import ru.gb.springbootlesson3.repository.BookRepository;
 
@@ -20,8 +20,8 @@ public class BookService {
     public Book getBookById(long id){
         return bookRepository.findById(id);
     }
-    public Book addBook(BookAddRequest bookAddRequest) {
-        Book book = new Book(bookAddRequest.getName());
+    public Book addBook(BookDTO bookDTO) {
+        Book book = new Book(bookDTO.getName());
         bookRepository.addBook(book);
         return book;
     }

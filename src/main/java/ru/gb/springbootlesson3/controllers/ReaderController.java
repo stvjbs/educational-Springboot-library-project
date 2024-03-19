@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import ru.gb.springbootlesson3.controllers.dto.ReaderDTO;
 import ru.gb.springbootlesson3.entity.Reader;
 import ru.gb.springbootlesson3.services.ReaderService;
 
@@ -33,7 +34,7 @@ public class ReaderController {
     }
 
     @PostMapping()
-    public ResponseEntity<Reader> addReader(@RequestBody Reader reader) {
+    public ResponseEntity<Reader> addReader(@RequestBody ReaderDTO reader) {
         return ResponseEntity.status(HttpStatus.CREATED).body(readerService.addReader(reader));
     }
 }

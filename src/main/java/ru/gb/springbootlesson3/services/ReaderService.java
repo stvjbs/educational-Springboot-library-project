@@ -2,6 +2,7 @@ package ru.gb.springbootlesson3.services;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import ru.gb.springbootlesson3.controllers.dto.ReaderDTO;
 import ru.gb.springbootlesson3.entity.Reader;
 import ru.gb.springbootlesson3.repository.ReaderRepository;
 
@@ -17,7 +18,8 @@ public class ReaderService {
     public Reader getReaderById(long id){
         return readerRepository.findById(id);
     }
-    public Reader addReader(Reader reader) {
+    public Reader addReader(ReaderDTO readerDTO) {
+        Reader reader = new Reader(readerDTO.getName());
         return readerRepository.addReader(reader);
     }
 
