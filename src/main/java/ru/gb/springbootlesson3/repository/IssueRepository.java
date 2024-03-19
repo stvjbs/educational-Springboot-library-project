@@ -11,6 +11,7 @@ public class IssueRepository {
     private final List<Issue> list = new ArrayList<>();
 
     public void createIssue(Issue issue) {
+
         list.add(issue);
     }
 

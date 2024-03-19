@@ -33,7 +33,7 @@ public class ReaderController {
         return ResponseEntity.status(HttpStatus.OK).body(readerService.deleteReader(id));
     }
 
-    @PostMapping()
+    @PostMapping("add")
     public ResponseEntity<Reader> addReader(@RequestBody ReaderDTO reader) {
         return ResponseEntity.status(HttpStatus.CREATED).body(readerService.addReader(reader));
     }

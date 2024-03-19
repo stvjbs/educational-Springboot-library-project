@@ -33,7 +33,7 @@ public class BookController {
         return ResponseEntity.status(HttpStatus.OK).body(bookService.deleteBook(id));
     }
 
-    @PostMapping("addBook")
+    @PostMapping("add")
     public ResponseEntity<Book> addBook(@RequestBody BookDTO bookDTO){
         return ResponseEntity.status(HttpStatus.CREATED).body(bookService.addBook(bookDTO));
     }
