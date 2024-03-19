@@ -7,8 +7,6 @@ import ru.gb.springbootlesson3.entity.Issue;
 import ru.gb.springbootlesson3.entity.Reader;
 import ru.gb.springbootlesson3.repository.IssueRepository;
 import ru.gb.springbootlesson3.repository.ReaderRepository;
-
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
