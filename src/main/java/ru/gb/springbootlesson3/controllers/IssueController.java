@@ -13,6 +13,7 @@ import ru.gb.springbootlesson3.controllers.dto.IssueDTO;
 import ru.gb.springbootlesson3.entity.Issue;
 import ru.gb.springbootlesson3.services.IssueService;
 
+import java.util.List;
 import java.util.NoSuchElementException;
 
 @Slf4j
@@ -40,7 +41,7 @@ public class IssueController {
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<Issue> getIssueById(@PathVariable long id) {
+    public ResponseEntity<List<Issue>> getIssueById(@PathVariable long id) {
         log.info("Поступил запрос отображения выдачи по id: issueId={}"
                 , id);
         if(service.getIssueById(id) == null){
@@ -59,13 +60,13 @@ public class IssueController {
     @ExceptionHandler(NotFoundEntityException.class)
     public ResponseEntity<String> notFoundEntityExceptionHandler() {
         log.info("Такого читателя или книги не существует. Повторите попытку");
-        return ResponseEntity.status(HttpStatus.CONFLICT)
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
                 .body("Такого читателя или книги не существует. Повторите попытку");
     }
     @ExceptionHandler(NotAllowException.class)
     public ResponseEntity<String> notAllowExceptionHandler() {
         log.info("У данного читателя достигнут лимит взятых книг.");
-        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+        return ResponseEntity.status(HttpStatus.CONFLICT)
                 .body("У данного читателя достигнут лимит взятых книг.");
     }
 }
