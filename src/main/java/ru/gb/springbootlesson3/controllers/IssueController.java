@@ -40,16 +40,33 @@ public class IssueController {
 
     }
 
-    @GetMapping("{id}")
-    public ResponseEntity<List<Issue>> getIssueById(@PathVariable long id) {
-        log.info("Поступил запрос отображения выдачи по id: issueId={}"
-                , id);
-        if(service.getIssueById(id) == null){
-            throw new NotFoundIssueException();
+    @GetMapping("{readerId}")
+    public ResponseEntity<List<Issue>> getIssueByReaderId(@PathVariable long readerId) {
+        log.info("Поступил запрос отображения выдач по id читателя: readerId={}"
+                , readerId);
+        if(service.getIssueByReaderId(readerId) == null){
+            throw new NotFoundEntityException();
         }
         return ResponseEntity.status(HttpStatus.OK)
-                .body(service.getIssueById(id));
+                .body(service.getIssueByReaderId(readerId));
     }
+    @GetMapping("/issues/{issueId}")
+    public ResponseEntity<Issue> getIssueById(@PathVariable long issueId) {
+        log.info("Поступил запрос отображения выдачи по id: issueId={}"
+                , issueId);
+        if(service.findIssueById(issueId).isPresent()){
+            return ResponseEntity.status(HttpStatus.OK)
+                    .body(service.findIssueById(issueId).get());
+        }
+        else throw new NotFoundIssueException();
+    }
+    @PutMapping("{issueId}")
+    public ResponseEntity<Issue> returnIssue(@PathVariable long issueId) {
+        log.info("Поступил запрос возврата выдачи: issueId={}"
+                , issueId);
+            return ResponseEntity.status(HttpStatus.OK).body(service.returnIssue(issueId));
+    }
+
     @ExceptionHandler(NotFoundIssueException.class)
     public ResponseEntity<String> notFoundIssueExceptionHandler() {
         log.info("Такой выдачи не существует. Повторите попытку");

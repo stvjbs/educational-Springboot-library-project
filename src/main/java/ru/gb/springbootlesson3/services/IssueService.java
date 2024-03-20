@@ -12,6 +12,7 @@ import ru.gb.springbootlesson3.repository.ReaderRepository;
 
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -38,8 +39,16 @@ public class IssueService {
         }
         else throw new NotAllowException();
     }
-    public List<Issue> getIssueById(long id){
-        return issueRepository.findById(id);
+    public List<Issue> getIssueByReaderId(long id){
+        return issueRepository.findByReaderId(id);
+    }
+    public Optional<Issue> findIssueById (long id){
+        return issueRepository.findIssueById(id);
+    }
+    public Issue returnIssue(long issueId){
+        long readerId = findIssueById(issueId).get().getIdReader();
+        readerRepository.findById(readerId).setAllowIssue(true);
+        return issueRepository.returnIssue(issueId);
     }
 
 }
