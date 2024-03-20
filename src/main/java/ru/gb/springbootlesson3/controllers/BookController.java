@@ -18,7 +18,7 @@ import java.util.List;
 public class BookController {
     BookService bookService;
 
-    @GetMapping("allBooks")
+    @GetMapping("all")
     public ResponseEntity<List<Book>> getAllBooks() {
         return ResponseEntity.status(HttpStatus.OK).body(bookService.getAllBooks());
     }

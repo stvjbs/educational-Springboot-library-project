@@ -19,7 +19,7 @@ import java.util.List;
 public class ReaderController {
     ReaderService readerService;
 
-    @GetMapping("allReaders")
+    @GetMapping("all")
     public ResponseEntity<List<Reader>> getAllReaders() {
         return ResponseEntity.status(HttpStatus.OK).body(readerService.getAllReaders());
     }

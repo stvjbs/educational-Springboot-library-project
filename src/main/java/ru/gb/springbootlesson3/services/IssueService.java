@@ -5,7 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.stereotype.Service;
-import ru.gb.springbootlesson3.Exceptions.NotAllowException;
+import ru.gb.springbootlesson3.exceptions.NotAllowException;
 import ru.gb.springbootlesson3.controllers.dto.IssueDTO;
 import ru.gb.springbootlesson3.entity.Book;
 import ru.gb.springbootlesson3.entity.Issue;
@@ -70,7 +70,7 @@ public class IssueService {
     private void readerAllowanceChecker(List<Issue> issueList, Reader reader) {
         if (issueList != null) {
             List<Issue> activeIssueList = issueList.stream()
-                    .filter(x -> x.getReturned_at() == null).toList();
+                    .filter(x -> x.getReturnedAt() == null).toList();
             if (activeIssueList.size() == maxAllowedBooks) {
                 reader.setAllowIssue(false);
             }

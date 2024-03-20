@@ -1,4 +1,4 @@
-package ru.gb.springbootlesson3.Exceptions;
+package ru.gb.springbootlesson3.exceptions;
 
 import java.util.NoSuchElementException;
 

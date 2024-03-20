@@ -2,7 +2,7 @@ package ru.gb.springbootlesson3.repository;
 
 import lombok.Getter;
 import org.springframework.stereotype.Repository;
-import ru.gb.springbootlesson3.Exceptions.NotFoundIssueException;
+import ru.gb.springbootlesson3.exceptions.NotFoundIssueException;
 import ru.gb.springbootlesson3.entity.Issue;
 
 import java.time.LocalDateTime;
@@ -37,7 +37,7 @@ public class IssueRepository {
 
     public Issue returnIssue(long issueId) {
         if (findIssueById(issueId).isPresent()) {
-            findIssueById(issueId).get().setReturned_at(LocalDateTime.now());
+            findIssueById(issueId).get().setReturnedAt(LocalDateTime.now());
             return findIssueById(issueId).get();
         } else throw new NotFoundIssueException();
     }
