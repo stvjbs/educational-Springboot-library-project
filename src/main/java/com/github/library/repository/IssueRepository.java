@@ -24,6 +24,11 @@ public class IssueRepository {
             mapIssues.put(issue.getIdReader(), issues);
         }
     }
+    public List<Issue> getAllIssues(){
+        List<Issue> allIssues = new ArrayList<>();
+        mapIssues.values().forEach(allIssues::addAll);
+        return allIssues;
+    }
 
     public List<Issue> findByReaderId(long readerId) {
         return mapIssues.get(readerId);

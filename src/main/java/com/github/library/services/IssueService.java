@@ -55,6 +55,9 @@ public class IssueService {
         readerRepository.findById(readerId).setAllowIssue(true);
         return issueRepository.returnIssue(issueId);
     }
+    public List<Issue> getAllIssues(){
+        return issueRepository.getAllIssues();
+    }
 
     private void entityNotNullChecker(Book book, Reader reader, IssueDTO request) {
         if (book == null) {

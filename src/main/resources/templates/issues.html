@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Issues</title>
+    <style>
+        table {
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid black;
+            padding: 8px;
+        }
+    </style>
+</head>
+<body>
+<h1>Issues: </h1>
+<table>
+    <tr>
+        <th>Book</th>
+        <th>Reader</th>
+        <th>Issued at</th>
+        <th>Returned at</th>
+    </tr>
+    <tr th:each="issue: ${issues}">
+        <th th:text="${issue.getIdBook()}"></th>
+        <th th:text="${issue.getIdReader()}"></th>
+        <th th:text="${issue.getIssuedAt()}"></th>
+        <th th:if="${issue.getReturnedAt()} != null"  th:text="${issue.getReturnedAt()}"></th>
+    </tr>
+</table>
+</body>
+</html>
