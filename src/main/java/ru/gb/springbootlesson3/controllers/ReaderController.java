@@ -28,6 +28,7 @@ public class ReaderController {
     public ResponseEntity<Reader> getReader(@PathVariable long id) {
         return ResponseEntity.status(HttpStatus.OK).body(readerService.getReaderById(id));
     }
+
     @GetMapping("{id}/issue")
     public ResponseEntity<List<Issue>> getReadersIssues(@PathVariable long id) {
         return ResponseEntity.status(HttpStatus.OK).body(readerService.getReadersIssues(id));
@@ -42,5 +43,4 @@ public class ReaderController {
     public ResponseEntity<Reader> addReader(@RequestBody ReaderDTO reader) {
         return ResponseEntity.status(HttpStatus.CREATED).body(readerService.addReader(reader));
     }
-
 }

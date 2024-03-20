@@ -13,13 +13,14 @@ import java.util.List;
 public class BookService {
     BookRepository bookRepository;
 
-
     public List<Book> getAllBooks() {
         return bookRepository.findAllBooks();
     }
-    public Book getBookById(long id){
+
+    public Book getBookById(long id) {
         return bookRepository.findById(id);
     }
+
     public Book addBook(BookDTO bookDTO) {
         Book book = new Book(bookDTO.getName());
         bookRepository.addBook(book);
@@ -27,6 +28,6 @@ public class BookService {
     }
 
     public Book deleteBook(long bookId) {
-       return bookRepository.deleteBook(bookId);
+        return bookRepository.deleteBook(bookId);
     }
 }

@@ -1,7 +1,6 @@
 package ru.gb.springbootlesson3.entity;
 
 import lombok.Data;
-import lombok.RequiredArgsConstructor;
 
 @Data
 public class Book {

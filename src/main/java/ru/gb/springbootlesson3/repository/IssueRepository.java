@@ -32,13 +32,13 @@ public class IssueRepository {
     public Optional<Issue> findIssueById(long issueId) {
         Collection<List<Issue>> allIssues = mapIssues.values();
         return allIssues.iterator().next()
-                .stream().filter(x -> x.getId()==issueId).findFirst();
+                .stream().filter(x -> x.getId() == issueId).findFirst();
     }
-    public Issue returnIssue(long issueId){
-        if(findIssueById(issueId).isPresent()) {
+
+    public Issue returnIssue(long issueId) {
+        if (findIssueById(issueId).isPresent()) {
             findIssueById(issueId).get().setReturned_at(LocalDateTime.now());
-            return  findIssueById(issueId).get();
-        }
-        else throw new NotFoundIssueException();
+            return findIssueById(issueId).get();
+        } else throw new NotFoundIssueException();
     }
 }

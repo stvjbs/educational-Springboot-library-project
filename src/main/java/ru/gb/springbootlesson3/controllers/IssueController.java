@@ -37,34 +37,34 @@ public class IssueController {
         } catch (NoSuchElementException e) {
             throw new NotFoundEntityException();
         }
-
     }
 
     @GetMapping("{readerId}")
     public ResponseEntity<List<Issue>> getIssueByReaderId(@PathVariable long readerId) {
         log.info("Поступил запрос отображения выдач по id читателя: readerId={}"
                 , readerId);
-        if(service.getIssueByReaderId(readerId) == null){
+        if (service.getIssueByReaderId(readerId) == null) {
             throw new NotFoundEntityException();
         }
         return ResponseEntity.status(HttpStatus.OK)
                 .body(service.getIssueByReaderId(readerId));
     }
+
     @GetMapping("/issues/{issueId}")
     public ResponseEntity<Issue> getIssueById(@PathVariable long issueId) {
         log.info("Поступил запрос отображения выдачи по id: issueId={}"
                 , issueId);
-        if(service.findIssueById(issueId).isPresent()){
+        if (service.findIssueById(issueId).isPresent()) {
             return ResponseEntity.status(HttpStatus.OK)
                     .body(service.findIssueById(issueId).get());
-        }
-        else throw new NotFoundIssueException();
+        } else throw new NotFoundIssueException();
     }
+
     @PutMapping("{issueId}")
     public ResponseEntity<Issue> returnIssue(@PathVariable long issueId) {
         log.info("Поступил запрос возврата выдачи: issueId={}"
                 , issueId);
-            return ResponseEntity.status(HttpStatus.OK).body(service.returnIssue(issueId));
+        return ResponseEntity.status(HttpStatus.OK).body(service.returnIssue(issueId));
     }
 
     @ExceptionHandler(NotFoundIssueException.class)
@@ -80,6 +80,7 @@ public class IssueController {
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
                 .body("Такого читателя или книги не существует. Повторите попытку");
     }
+
     @ExceptionHandler(NotAllowException.class)
     public ResponseEntity<String> notAllowExceptionHandler() {
         log.info("У данного читателя достигнут лимит взятых книг.");

@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-
 import org.springframework.web.bind.annotation.*;
 import ru.gb.springbootlesson3.controllers.dto.BookDTO;
 import ru.gb.springbootlesson3.entity.Book;
@@ -23,18 +22,19 @@ public class BookController {
     public ResponseEntity<List<Book>> getAllBooks() {
         return ResponseEntity.status(HttpStatus.OK).body(bookService.getAllBooks());
     }
+
     @GetMapping("{id}")
-    public ResponseEntity<Book> getBook(@PathVariable long id){
+    public ResponseEntity<Book> getBook(@PathVariable long id) {
         return ResponseEntity.status(HttpStatus.OK).body(bookService.getBookById(id));
     }
 
     @DeleteMapping("{id}")
-    public ResponseEntity<Book> deleteBook(@PathVariable long id){
+    public ResponseEntity<Book> deleteBook(@PathVariable long id) {
         return ResponseEntity.status(HttpStatus.OK).body(bookService.deleteBook(id));
     }
 
     @PostMapping("add")
-    public ResponseEntity<Book> addBook(@RequestBody BookDTO bookDTO){
+    public ResponseEntity<Book> addBook(@RequestBody BookDTO bookDTO) {
         return ResponseEntity.status(HttpStatus.CREATED).body(bookService.addBook(bookDTO));
     }
 }

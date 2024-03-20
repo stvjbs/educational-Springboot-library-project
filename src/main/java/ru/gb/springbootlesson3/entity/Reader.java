@@ -8,6 +8,7 @@ public class Reader {
     private final long id;
     private final String name;
     private boolean allowIssue;
+
     public Reader(String name) {
         id = genId++;
         this.name = name;

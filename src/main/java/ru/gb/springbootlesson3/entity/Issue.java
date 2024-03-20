@@ -7,7 +7,6 @@ import java.time.LocalDateTime;
 @Data
 public class Issue {
     private static long genId;
-
     private final long id;
     private final long idReader;
     private final long idBook;
@@ -21,4 +20,5 @@ public class Issue {
         issued_at = LocalDateTime.now();
         returned_at = null;
     }
+
 }
