@@ -32,25 +32,27 @@ public class UIController {
         model.addAttribute("books", bookService.getAllBooks());
         return "books";
     }
+
     @GetMapping("readers")
-    public String readersDisplay(Model model){
+    public String readersDisplay(Model model) {
         model.addAttribute("readers", readerService.getAllReaders());
         return "readers";
     }
+
     @GetMapping("issues")
-    public String issuesTable(Model model){
+    public String issuesTable(Model model) {
         model.addAttribute("issues", issueService.getAllIssues());
         return "issues";
     }
+
     @GetMapping("reader/{id}")
-    public String issuesOfReader(@PathVariable long id, Model model){
+    public String issuesOfReader(@PathVariable long id, Model model) {
         model.addAttribute("name", readerService.getReaderById(id).getName());
         model.addAttribute("id", id);
         List<Book> books = new ArrayList<>();
-        issueService.getIssueByReaderId(id)
-                .forEach(x-> books.add(bookService.getBookById(x.getIdBook())));
+        issueService.findIssueByReaderId(id)
+                .forEach(x -> books.add(bookService.getBookById(x.getIdBook())));
         model.addAttribute("books", books);
         return "reader";
     }
-
 }

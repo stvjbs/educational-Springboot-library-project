@@ -1,5 +1,6 @@
 package com.github.library.controllers;
 
+import com.github.library.controllers.dto.IssueDTO;
 import com.github.library.entity.Issue;
 import com.github.library.exceptions.NotAllowException;
 import com.github.library.exceptions.NotFoundEntityException;
@@ -11,9 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import com.github.library.controllers.dto.IssueDTO;
 
-import java.util.List;
 import java.util.NoSuchElementException;
 
 @Slf4j
@@ -21,11 +20,11 @@ import java.util.NoSuchElementException;
 @RequestMapping("issue")
 @RequiredArgsConstructor
 public class IssueController {
-    private IssueService service;
+    private IssueService issueService;
 
     @Autowired
-    public IssueController(IssueService service) {
-        this.service = service;
+    public IssueController(IssueService issueService) {
+        this.issueService = issueService;
     }
 
     @PostMapping("add")
@@ -33,38 +32,36 @@ public class IssueController {
         log.info("Поступил запрос на выдачу: readerId={}, bookId={}"
                 , issueDTO.getReaderId(), issueDTO.getBookId());
         try {
-            return ResponseEntity.status(HttpStatus.CREATED).body(service.createIssue(issueDTO));
+            return ResponseEntity.status(HttpStatus.CREATED).body(issueService.createIssue(issueDTO));
         } catch (NoSuchElementException e) {
             throw new NotFoundEntityException();
+        } catch (NullPointerException e) {
+            throw new NotFoundIssueException();
         }
-    }
 
-    @GetMapping("{readerId}")
-    public ResponseEntity<List<Issue>> getIssueByReaderId(@PathVariable long readerId) {
-        log.info("Поступил запрос отображения выдач по id читателя: readerId={}"
-                , readerId);
-        if (service.getIssueByReaderId(readerId) == null) {
-            throw new NotFoundEntityException();
-        }
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(service.getIssueByReaderId(readerId));
     }
 
     @GetMapping("/issues/{issueId}")
     public ResponseEntity<Issue> getIssueById(@PathVariable long issueId) {
         log.info("Поступил запрос отображения выдачи по id: issueId={}"
                 , issueId);
-        if (service.findIssueById(issueId).isPresent()) {
+        try {
             return ResponseEntity.status(HttpStatus.OK)
-                    .body(service.findIssueById(issueId).get());
-        } else throw new NotFoundIssueException();
+                    .body(issueService.findIssueById(issueId).get());
+        } catch (NullPointerException e) {
+            throw new NotFoundIssueException();
+        }
     }
 
     @PutMapping("{issueId}")
     public ResponseEntity<Issue> returnIssue(@PathVariable long issueId) {
         log.info("Поступил запрос возврата выдачи: issueId={}"
                 , issueId);
-        return ResponseEntity.status(HttpStatus.OK).body(service.returnIssue(issueId));
+        try {
+            return ResponseEntity.status(HttpStatus.OK).body(issueService.returnIssue(issueId));
+        } catch (NoSuchElementException e) {
+            throw new NotFoundIssueException();
+        }
     }
 
     @ExceptionHandler(NotFoundIssueException.class)

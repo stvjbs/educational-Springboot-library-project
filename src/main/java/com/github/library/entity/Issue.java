@@ -1,24 +1,29 @@
 package com.github.library.entity;
 
+import jakarta.persistence.*;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
 @Data
+@Entity
+@NoArgsConstructor
+@Table(name = "issues")
 public class Issue {
-    private static long genId;
-    private final long id;
-    private final long idReader;
-    private final long idBook;
-    private final LocalDateTime issuedAt;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
+
+    private long idReader;
+    private long idBook;
+    private LocalDateTime issuedAt;
     private LocalDateTime returnedAt;
 
     public Issue(long idReader, long idBook) {
-        id = genId++;
         this.idBook = idBook;
         this.idReader = idReader;
         issuedAt = LocalDateTime.now();
         returnedAt = null;
     }
-
 }

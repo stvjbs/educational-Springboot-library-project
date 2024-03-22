@@ -1,16 +1,21 @@
 package com.github.library.entity;
 
+import jakarta.persistence.*;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@Entity
+@NoArgsConstructor
+@Table(name = "readers")
 public class Reader {
-    private static long genId;
-    private final long id;
-    private final String name;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
+    private String name;
     private boolean allowIssue;
 
     public Reader(String name) {
-        id = genId++;
         this.name = name;
         allowIssue = true;
     }

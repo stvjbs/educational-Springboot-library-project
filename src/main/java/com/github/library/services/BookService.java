@@ -14,20 +14,22 @@ public class BookService {
     BookRepository bookRepository;
 
     public List<Book> getAllBooks() {
-        return bookRepository.findAllBooks();
+        return bookRepository.findAll();
     }
 
     public Book getBookById(long id) {
-        return bookRepository.findById(id);
+        return bookRepository.findById(id).get();
     }
 
     public Book addBook(BookDTO bookDTO) {
         Book book = new Book(bookDTO.getName());
-        bookRepository.addBook(book);
+        bookRepository.save(book);
         return book;
     }
 
     public Book deleteBook(long bookId) {
-        return bookRepository.deleteBook(bookId);
+        Book book = bookRepository.findById(bookId).get();
+        bookRepository.delete(book);
+        return book;
     }
 }
