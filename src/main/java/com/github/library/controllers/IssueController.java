@@ -2,6 +2,7 @@ package com.github.library.controllers;
 
 import com.github.library.controllers.dto.IssueDTO;
 import com.github.library.entity.Issue;
+import com.github.library.exceptions.AlreadyReturnedException;
 import com.github.library.exceptions.NotAllowException;
 import com.github.library.exceptions.NotFoundEntityException;
 import com.github.library.exceptions.NotFoundIssueException;
@@ -83,5 +84,12 @@ public class IssueController {
         log.info("У данного читателя достигнут лимит взятых книг.");
         return ResponseEntity.status(HttpStatus.CONFLICT)
                 .body("У данного читателя достигнут лимит взятых книг.");
+    }
+
+    @ExceptionHandler(AlreadyReturnedException.class)
+    public ResponseEntity<String> alreadyReturnedExceptionHandler() {
+        log.info("Выдача была возвращена ранее.");
+        return ResponseEntity.status(HttpStatus.CONFLICT)
+                .body("Выдача была возвращена ранее.");
     }
 }
