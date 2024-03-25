@@ -2,18 +2,16 @@ package com.github.library.services;
 
 import com.github.library.controllers.dto.ReaderDTO;
 import com.github.library.entity.Reader;
-import com.github.library.repository.IssueRepository;
 import com.github.library.repository.ReaderRepository;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class ReaderService {
-    ReaderRepository readerRepository;
-    IssueRepository issueRepository;
+    private final ReaderRepository readerRepository;
 
     public List<Reader> getAllReaders() {
         return readerRepository.findAll();

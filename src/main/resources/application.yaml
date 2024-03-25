@@ -9,7 +9,6 @@ spring:
     username: librarian
     password: password
     driver-class-name: org.postgresql.Driver
-
   jpa:
     hibernate:
       ddl-auto: update

@@ -18,16 +18,16 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
-@Slf4j
-@RequiredArgsConstructor
 @Service
 @EnableConfigurationProperties
+@RequiredArgsConstructor
+@Slf4j
 public class IssueService {
     private final IssueRepository issueRepository;
     private final ReaderRepository readerRepository;
     private final BookRepository bookRepository;
     @Value("${spring.application.services.IssueService.maxAllowedBooks}")
-    public int maxAllowedBooks;
+    private int maxAllowedBooks;
 
     public Issue createIssue(IssueDTO request) throws RuntimeException {
         if (bookRepository.findById(request.getBookId()).isEmpty() ||

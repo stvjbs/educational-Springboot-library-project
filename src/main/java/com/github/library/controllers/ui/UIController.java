@@ -4,6 +4,7 @@ import com.github.library.entity.Book;
 import com.github.library.services.BookService;
 import com.github.library.services.IssueService;
 import com.github.library.services.ReaderService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,18 +15,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Controller
-
 @RequestMapping("ui")
+@RequiredArgsConstructor
 public class UIController {
-    BookService bookService;
-    ReaderService readerService;
-    IssueService issueService;
-
-    public UIController(BookService bookService, ReaderService readerService, IssueService issueService) {
-        this.bookService = bookService;
-        this.readerService = readerService;
-        this.issueService = issueService;
-    }
+    private final BookService bookService;
+    private final ReaderService readerService;
+    private final IssueService issueService;
 
     @GetMapping("books")
     public String booksDisplay(Model model) {

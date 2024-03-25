@@ -3,20 +3,22 @@ package com.github.library.entity;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 
-@Data
+
 @Entity
-@NoArgsConstructor
 @Table(name = "readers")
+@Data
+@NoArgsConstructor(force = true)
+@RequiredArgsConstructor
 public class Reader {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    private String name;
-    private boolean allowIssue;
+    @Column(name = "Name")
+    private final String name;
+    @Column(name = "Allow_issue")
+    private boolean allowIssue = true;
 
-    public Reader(String name) {
-        this.name = name;
-        allowIssue = true;
-    }
+
 }

@@ -16,10 +16,10 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.NoSuchElementException;
 
-@Slf4j
 @RestController
 @RequestMapping("issue")
 @RequiredArgsConstructor
+@Slf4j
 public class IssueController {
     private IssueService issueService;
 

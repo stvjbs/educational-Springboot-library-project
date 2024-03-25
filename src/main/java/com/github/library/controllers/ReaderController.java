@@ -7,7 +7,7 @@ import com.github.library.exceptions.NotFoundEntityException;
 import com.github.library.exceptions.NotFoundIssueException;
 import com.github.library.services.IssueService;
 import com.github.library.services.ReaderService;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,12 +17,12 @@ import java.util.List;
 import java.util.NoSuchElementException;
 
 @RestController
-@Slf4j
 @RequestMapping("reader")
-@AllArgsConstructor
+@RequiredArgsConstructor
+@Slf4j
 public class ReaderController {
-    ReaderService readerService;
-    IssueService issueService;
+    private final ReaderService readerService;
+    private final IssueService issueService;
 
     @GetMapping("all")
     public ResponseEntity<List<Reader>> getAllReaders() {
@@ -60,3 +60,4 @@ public class ReaderController {
         return ResponseEntity.status(HttpStatus.CREATED).body(readerService.addReader(reader));
     }
 }
+

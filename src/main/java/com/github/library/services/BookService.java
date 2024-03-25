@@ -3,15 +3,15 @@ package com.github.library.services;
 import com.github.library.controllers.dto.BookDTO;
 import com.github.library.entity.Book;
 import com.github.library.repository.BookRepository;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class BookService {
-    BookRepository bookRepository;
+    private final BookRepository bookRepository;
 
     public List<Book> getAllBooks() {
         return bookRepository.findAll();
