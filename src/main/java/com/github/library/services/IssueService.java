@@ -59,18 +59,12 @@ public class IssueService {
         } else throw new AlreadyReturnedException();
     }
 
-
     public List<Issue> getAllIssues() {
         return issueRepository.findAll();
     }
 
-    private int countOfActiveIssues(Long readerId) {
-        return issueRepository.findAllByIdReader(readerId)
-                .stream().filter(x -> x.getReturnedAt() == null).toList().size();
-    }
-
     private void readerAllowSetter(Long readerId) {
-        if (countOfActiveIssues(readerId) >= maxAllowedBooks) {
+        if (issueRepository.countIssuesByIdReaderAndReturnedAtIsNull(readerId) >= maxAllowedBooks) {
             readerRepository.findById(readerId).get().setAllowIssue(false);
             readerRepository.flush();
         } else {
