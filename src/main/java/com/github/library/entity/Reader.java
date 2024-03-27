@@ -17,8 +17,6 @@ public class Reader {
     private long id;
     @Column(name = "Name")
     private final String name;
-    @Column(name = "Allow_issue")
-    private boolean allowIssue = true;
 
 
 }

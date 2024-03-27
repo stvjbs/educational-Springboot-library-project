@@ -1,6 +1,6 @@
 package com.github.library.services;
 
-import com.github.library.controllers.dto.ReaderDTO;
+import com.github.library.dto.ReaderDTO;
 import com.github.library.entity.Reader;
 import com.github.library.repository.ReaderRepository;
 import lombok.RequiredArgsConstructor;

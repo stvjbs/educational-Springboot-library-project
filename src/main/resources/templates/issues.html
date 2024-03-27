@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Issues</title>
@@ -23,8 +23,8 @@
         <th>Returned at</th>
     </tr>
     <tr th:each="issue: ${issues}">
-        <th th:text="${issue.getIdBook()}"></th>
-        <th th:text="${issue.getIdReader()}"></th>
+        <th th:text="${issue.getBook().getName()}"></th>
+        <th th:text="${issue.getReader().getName()}"></th>
         <th th:text="${issue.getIssuedAt()}"></th>
         <th th:if="${issue.getReturnedAt()} != null"  th:text="${issue.getReturnedAt()}"></th>
     </tr>

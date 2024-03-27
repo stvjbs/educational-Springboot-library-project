@@ -16,10 +16,15 @@ public class Issue {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    @Column(name = "Id_reader")
-    private final long idReader;
-    @Column(name = "Id_book")
-    private final long idBook;
+
+    @ManyToOne
+    @JoinColumn
+    private final Reader reader;
+
+    @ManyToOne
+    @JoinColumn
+    private final Book book;
+
     @Column(name = "Issued_at")
     private LocalDateTime issuedAt = LocalDateTime.now();
     @Column(name = "Returned_at")

@@ -1,6 +1,6 @@
 package com.github.library.services;
 
-import com.github.library.controllers.dto.BookDTO;
+import com.github.library.dto.BookDTO;
 import com.github.library.entity.Book;
 import com.github.library.repository.BookRepository;
 import lombok.RequiredArgsConstructor;

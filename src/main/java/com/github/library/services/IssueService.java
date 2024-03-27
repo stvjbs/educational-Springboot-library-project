@@ -1,7 +1,8 @@
 package com.github.library.services;
 
-import com.github.library.controllers.dto.IssueDTO;
+import com.github.library.dto.IssueDTO;
 import com.github.library.entity.Issue;
+import com.github.library.entity.Reader;
 import com.github.library.exceptions.AlreadyReturnedException;
 import com.github.library.exceptions.NotAllowException;
 import com.github.library.exceptions.NotFoundEntityException;
@@ -32,11 +33,13 @@ public class IssueService {
     public Issue createIssue(IssueDTO request) throws RuntimeException {
         if (bookRepository.findById(request.getBookId()).isEmpty() ||
                 readerRepository.findById(request.getReaderId()).isEmpty()) throw new NotFoundEntityException();
-        boolean isAllow = readerRepository.findById(request.getReaderId()).get().isAllowIssue();
+        Reader thisReader = readerRepository.findById(request.getReaderId()).get();
+        int countActiveIssues = issueRepository.countIssuesByReaderAndReturnedAtIsNull(thisReader);
+        boolean isAllow = countActiveIssues < maxAllowedBooks;
         if (isAllow) {
-            Issue currentIssue = new Issue(request.getReaderId(), request.getBookId());
+            Issue currentIssue = new Issue(readerRepository.findById(request.getReaderId()).get(),
+                    bookRepository.findById(request.getBookId()).get());
             issueRepository.save(currentIssue);
-            readerAllowSetter(request.getReaderId());
             return currentIssue;
         } else throw new NotAllowException();
     }
@@ -46,15 +49,13 @@ public class IssueService {
     }
 
     public List<Issue> findIssueByReaderId(long idReader) {
-        return issueRepository.findAllByIdReader(idReader);
+        return issueRepository.findAllByReader(readerRepository.findById(idReader).get());
     }
 
     public Issue returnIssue(long issueId) {
         if (findIssueById(issueId).get().getReturnedAt() == null) {
-            long readerId = findIssueById(issueId).get().getIdReader();
             findIssueById(issueId).get().setReturnedAt(LocalDateTime.now());
             issueRepository.flush();
-            readerAllowSetter(readerId);
             return issueRepository.findById(issueId).get();
         } else throw new AlreadyReturnedException();
     }
@@ -63,13 +64,4 @@ public class IssueService {
         return issueRepository.findAll();
     }
 
-    private void readerAllowSetter(Long readerId) {
-        if (issueRepository.countIssuesByIdReaderAndReturnedAtIsNull(readerId) >= maxAllowedBooks) {
-            readerRepository.findById(readerId).get().setAllowIssue(false);
-            readerRepository.flush();
-        } else {
-            readerRepository.findById(readerId).get().setAllowIssue(true);
-            readerRepository.flush();
-        }
-    }
 }

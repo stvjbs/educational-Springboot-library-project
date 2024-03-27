@@ -46,7 +46,7 @@ public class UIController {
         model.addAttribute("id", id);
         List<Book> books = new ArrayList<>();
         issueService.findIssueByReaderId(id)
-                .forEach(x -> books.add(bookService.getBookById(x.getIdBook())));
+                .forEach(x -> books.add(bookService.getBookById(x.getBook().getId())));
         model.addAttribute("books", books);
         return "reader";
     }

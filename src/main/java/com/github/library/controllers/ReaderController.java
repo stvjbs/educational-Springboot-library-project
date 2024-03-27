@@ -1,16 +1,19 @@
 package com.github.library.controllers;
 
-import com.github.library.controllers.dto.ReaderDTO;
+import com.github.library.dto.ReaderDTO;
 import com.github.library.entity.Issue;
 import com.github.library.entity.Reader;
+import com.github.library.exceptions.NameValidationException;
 import com.github.library.exceptions.NotFoundEntityException;
 import com.github.library.exceptions.NotFoundIssueException;
 import com.github.library.services.IssueService;
 import com.github.library.services.ReaderService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -56,8 +59,15 @@ public class ReaderController {
     }
 
     @PostMapping("add")
-    public ResponseEntity<Reader> addReader(@RequestBody ReaderDTO reader) {
+    public ResponseEntity<Reader> addReader(@RequestBody @Valid ReaderDTO reader, Errors errors) {
+        if (errors.hasErrors()) throw new NameValidationException();
         return ResponseEntity.status(HttpStatus.CREATED).body(readerService.addReader(reader));
+    }
+
+    @ExceptionHandler(NameValidationException.class)
+    public ResponseEntity<String> nameValidationExceptionHandler() {
+        log.info("Ошибка валидации имени.");
+        return ResponseEntity.status(HttpStatus.CONFLICT).body("Имя должно содержать минимум 3 символа.");
     }
 }
 
