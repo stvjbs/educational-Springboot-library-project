@@ -2,7 +2,7 @@ package com.github.library.controllers;
 
 import com.github.library.dto.BookDTO;
 import com.github.library.entity.Book;
-import com.github.library.exceptions.NameValidationException;
+import com.github.library.exceptions.EntityValidationException;
 import com.github.library.services.BookService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -21,7 +21,7 @@ import java.util.List;
 public class BookController {
     BookService bookService;
 
-    @GetMapping("all")
+    @GetMapping()
     public ResponseEntity<List<Book>> getAllBooks() {
         return ResponseEntity.status(HttpStatus.OK).body(bookService.getAllBooks());
     }
@@ -31,20 +31,20 @@ public class BookController {
         return ResponseEntity.status(HttpStatus.OK).body(bookService.getBookById(id));
     }
 
+    @PostMapping()
+    public ResponseEntity<Book> addBook(@RequestBody @Valid BookDTO bookDTO, Errors errors) {
+        if (errors.hasErrors()) throw new EntityValidationException();
+        return ResponseEntity.status(HttpStatus.CREATED).body(bookService.addBook(bookDTO));
+    }
+
     @DeleteMapping("{id}")
     public ResponseEntity<Book> deleteBook(@PathVariable long id) {
         return ResponseEntity.status(HttpStatus.OK).body(bookService.deleteBook(id));
     }
 
-    @PostMapping("add")
-    public ResponseEntity<Book> addBook(@RequestBody @Valid BookDTO bookDTO, Errors errors) {
-        if (errors.hasErrors()) throw new NameValidationException();
-        return ResponseEntity.status(HttpStatus.CREATED).body(bookService.addBook(bookDTO));
-    }
-
-    @ExceptionHandler(NameValidationException.class)
+    @ExceptionHandler(EntityValidationException.class)
     public ResponseEntity<String> nameValidationExceptionHandler() {
-        log.info("Ошибка валидации имени.");
-        return ResponseEntity.status(HttpStatus.CONFLICT).body("Имя должно содержать минимум 3 символа.");
+        log.info("Name validation error.");
+        return ResponseEntity.status(HttpStatus.CONFLICT).body("Name must exists at least 3 characters.");
     }
 }
