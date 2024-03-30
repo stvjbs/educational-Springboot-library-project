@@ -31,14 +31,14 @@ public class IssueService {
     private int maxAllowedBooks;
 
     public Issue createIssue(IssueDTO request) throws RuntimeException {
-        if (bookRepository.findById(request.getBookId()).isEmpty() ||
-                readerRepository.findById(request.getReaderId()).isEmpty()) throw new NotFoundEntityException();
-        Reader thisReader = readerRepository.findById(request.getReaderId()).get();
+        if (bookRepository.findById(request.getBook().getId()).isEmpty() ||
+                readerRepository.findById(request.getReader().getId()).isEmpty()) throw new NotFoundEntityException();
+        Reader thisReader = readerRepository.findById(request.getReader().getId()).get();
         int countActiveIssues = issueRepository.countIssuesByReaderAndReturnedAtIsNull(thisReader);
         boolean isAllow = countActiveIssues < maxAllowedBooks;
         if (isAllow) {
-            Issue currentIssue = new Issue(readerRepository.findById(request.getReaderId()).get(),
-                    bookRepository.findById(request.getBookId()).get());
+            Issue currentIssue = new Issue(readerRepository.findById(request.getReader().getId()).get(),
+                    bookRepository.findById(request.getBook().getId()).get());
             issueRepository.save(currentIssue);
             return currentIssue;
         } else throw new NotAllowException();
