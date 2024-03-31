@@ -17,6 +17,4 @@ public class Reader {
     private long id;
     @Column(name = "Name")
     private final String name;
-
-
 }
