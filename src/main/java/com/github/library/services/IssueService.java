@@ -1,6 +1,8 @@
 package com.github.library.services;
 
 import com.github.library.dto.IssueDTO;
+import com.github.library.dto.mapperDTO.IssueDTOMapper;
+import com.github.library.entity.Book;
 import com.github.library.entity.Issue;
 import com.github.library.entity.Reader;
 import com.github.library.exceptions.AlreadyReturnedException;
@@ -16,6 +18,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -27,41 +30,55 @@ public class IssueService {
     private final IssueRepository issueRepository;
     private final ReaderRepository readerRepository;
     private final BookRepository bookRepository;
+    private final IssueDTOMapper issueDTOMapper;
     @Value("${spring.application.services.IssueService.maxAllowedBooks}")
     private int maxAllowedBooks;
 
-    public Issue createIssue(IssueDTO request) throws RuntimeException {
-        if (bookRepository.findById(request.getBookId()).isEmpty() ||
-                readerRepository.findById(request.getReaderId()).isEmpty()) throw new NotFoundEntityException();
-        Reader thisReader = readerRepository.findById(request.getReaderId()).get();
-        int countActiveIssues = issueRepository.countIssuesByReaderAndReturnedAtIsNull(thisReader);
+    public IssueDTO createIssue(IssueDTO request) {
+        Optional<Book> thisBook = bookRepository.findById(request.getBook().getId());
+        Optional<Reader> thisReader = readerRepository.findById(request.getReader().getId());
+        if (thisBook.isEmpty() || thisReader.isEmpty()) throw new NotFoundEntityException();
+
+        int countActiveIssues = issueRepository.countIssuesByReaderAndReturnedAtIsNull(thisReader.get());
         boolean isAllow = countActiveIssues < maxAllowedBooks;
+
         if (isAllow) {
-            Issue currentIssue = new Issue(readerRepository.findById(request.getReaderId()).get(),
-                    bookRepository.findById(request.getBookId()).get());
+            Issue currentIssue = Issue.builder()
+                    .reader(thisReader.get())
+                    .book(thisBook.get())
+                    .build();
             issueRepository.save(currentIssue);
-            return currentIssue;
+            return issueDTOMapper.mapToIssueDTO(currentIssue);
         } else throw new NotAllowException();
     }
 
-    public Optional<Issue> findIssueById(long id) {
-        return issueRepository.findById(id);
+    public IssueDTO findIssueById(long id) {
+        return issueDTOMapper
+                .mapToIssueDTO(issueRepository.findById(id).orElseThrow(NotFoundEntityException::new));
     }
 
-    public List<Issue> findIssueByReaderId(long idReader) {
-        return issueRepository.findAllByReader(readerRepository.findById(idReader).get());
+    public List<IssueDTO> findIssueByReaderId(long idReader) {
+        List<IssueDTO> list = new ArrayList<>();
+        issueRepository.findAllByReader(
+                        readerRepository.findById(idReader).orElseThrow(NotFoundEntityException::new))
+                .forEach(x -> list.add(issueDTOMapper.mapToIssueDTO(x)));
+        return list;
     }
 
-    public Issue returnIssue(long issueId) {
-        if (findIssueById(issueId).get().getReturnedAt() == null) {
-            findIssueById(issueId).get().setReturnedAt(LocalDateTime.now());
+    public IssueDTO returnIssue(long issueId) {
+        Issue thisIssue = issueRepository.findById(issueId)
+                .orElseThrow(NotFoundEntityException::new);
+        if (thisIssue.getReturnedAt() == null) {
+            thisIssue.setReturnedAt(LocalDateTime.now());
             issueRepository.flush();
-            return issueRepository.findById(issueId).get();
+            return issueDTOMapper.mapToIssueDTO(thisIssue);
         } else throw new AlreadyReturnedException();
     }
 
-    public List<Issue> getAllIssues() {
-        return issueRepository.findAll();
+    public List<IssueDTO> getAllIssues() {
+        List<IssueDTO> list = new ArrayList<>();
+        issueRepository.findAll().forEach(x -> list.add(issueDTOMapper.mapToIssueDTO(x)));
+        return list;
     }
 
 }

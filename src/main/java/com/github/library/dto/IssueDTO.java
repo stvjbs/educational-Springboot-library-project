@@ -1,12 +1,22 @@
 package com.github.library.dto;
 
-import jakarta.validation.constraints.NotBlank;
+import com.github.library.entity.Book;
+import com.github.library.entity.Reader;
+import jakarta.validation.constraints.NotNull;
+import lombok.Builder;
 import lombok.Data;
 
+import java.time.LocalDateTime;
+
 @Data
+@Builder
 public class IssueDTO {
-    @NotBlank
-    private long readerId;
-    @NotBlank
-    private long bookId;
+    @NotNull
+    private Reader reader;
+    @NotNull
+    private Book book;
+
+    private LocalDateTime issuedAt;
+    private LocalDateTime returnedAt;
+    private long id;
 }

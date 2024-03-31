@@ -1,17 +1,16 @@
 package com.github.library.entity;
 
 import jakarta.persistence.*;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "issues")
 @Data
-@RequiredArgsConstructor
+@AllArgsConstructor
 @NoArgsConstructor(force = true)
+@Builder
 public class Issue {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,14 +18,16 @@ public class Issue {
 
     @ManyToOne
     @JoinColumn
-    private final Reader reader;
+    private Reader reader;
 
     @ManyToOne
     @JoinColumn
-    private final Book book;
+    private Book book;
 
     @Column(name = "Issued_at")
+    @Builder.Default
     private LocalDateTime issuedAt = LocalDateTime.now();
     @Column(name = "Returned_at")
+    @Builder.Default
     private LocalDateTime returnedAt = null;
 }

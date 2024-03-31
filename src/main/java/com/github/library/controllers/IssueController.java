@@ -1,81 +1,54 @@
 package com.github.library.controllers;
 
 import com.github.library.dto.IssueDTO;
-import com.github.library.entity.Issue;
-import com.github.library.exceptions.AlreadyReturnedException;
-import com.github.library.exceptions.NotAllowException;
-import com.github.library.exceptions.NotFoundEntityException;
-import com.github.library.exceptions.NotFoundIssueException;
+import com.github.library.exceptions.EntityValidationException;
 import com.github.library.services.IssueService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.NoSuchElementException;
+import java.util.List;
 
 @RestController
-@RequestMapping("issue")
+@RequestMapping("/issue")
 @RequiredArgsConstructor
 @Slf4j
 public class IssueController {
     private final IssueService issueService;
 
-    @PostMapping("add")
-    public ResponseEntity<Issue> issueBook(@RequestBody IssueDTO issueDTO) {
-        log.info("Поступил запрос на выдачу: readerId={}, bookId={}", issueDTO.getReaderId(), issueDTO.getBookId());
-        try {
-            return ResponseEntity.status(HttpStatus.CREATED).body(issueService.createIssue(issueDTO));
-        } catch (NoSuchElementException e) {
-            throw new NotFoundEntityException();
-        } catch (NullPointerException e) {
-            throw new NotFoundIssueException();
-        }
-
+    @GetMapping()
+    public ResponseEntity<List<IssueDTO>> findAllIssues() {
+        log.info("Received a request to display all issues");
+        return ResponseEntity.status(HttpStatus.OK).body(issueService.getAllIssues());
     }
 
-    @GetMapping("/issues/{issueId}")
-    public ResponseEntity<Issue> getIssueById(@PathVariable long issueId) {
-        log.info("Поступил запрос отображения выдачи по id: issueId={}", issueId);
-        try {
-            return ResponseEntity.status(HttpStatus.OK).body(issueService.findIssueById(issueId).get());
-        } catch (NullPointerException e) {
-            throw new NotFoundIssueException();
-        }
+    @GetMapping("/{issueId}")
+    public ResponseEntity<IssueDTO> getIssueById(@PathVariable long issueId) {
+        log.info("Received a request to display issue by id: issueId={}", issueId);
+        return ResponseEntity.status(HttpStatus.OK).body(issueService.findIssueById(issueId));
     }
 
-    @PutMapping("{issueId}")
-    public ResponseEntity<Issue> returnIssue(@PathVariable long issueId) {
-        log.info("Поступил запрос возврата выдачи: issueId={}", issueId);
-        try {
-            return ResponseEntity.status(HttpStatus.OK).body(issueService.returnIssue(issueId));
-        } catch (NoSuchElementException e) {
-            throw new NotFoundIssueException();
-        }
+    @GetMapping("/reader")
+    public ResponseEntity<List<IssueDTO>> getIssuesByReaderId(@RequestParam long readerId) {
+        log.info("Received a request to display issues by reader's id: readerId={}"
+                , readerId);
+        return ResponseEntity.status(HttpStatus.OK).body(issueService.findIssueByReaderId(readerId));
     }
 
-    @ExceptionHandler(NotFoundIssueException.class)
-    public ResponseEntity<String> notFoundIssueExceptionHandler() {
-        log.info("Такой выдачи не существует. Повторите попытку");
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Такой выдачи не существует. Повторите попытку");
+    @PostMapping()
+    public ResponseEntity<IssueDTO> issueBook(@RequestBody @Valid IssueDTO issueDTO, Errors errors) {
+        log.info("Received a request to issue: readerId={}, bookId={}", issueDTO.getReader(), issueDTO.getBook());
+        if (errors.hasErrors()) throw new EntityValidationException();
+        return ResponseEntity.status(HttpStatus.CREATED).body(issueService.createIssue(issueDTO));
     }
 
-    @ExceptionHandler(NotFoundEntityException.class)
-    public ResponseEntity<String> notFoundEntityExceptionHandler() {
-        log.info("Такого читателя или книги не существует. Повторите попытку");
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Такого читателя или книги не существует. Повторите попытку");
-    }
-
-    @ExceptionHandler(NotAllowException.class)
-    public ResponseEntity<String> notAllowExceptionHandler() {
-        log.info("У данного читателя достигнут лимит взятых книг.");
-        return ResponseEntity.status(HttpStatus.CONFLICT).body("У данного читателя достигнут лимит взятых книг.");
-    }
-
-    @ExceptionHandler(AlreadyReturnedException.class)
-    public ResponseEntity<String> alreadyReturnedExceptionHandler() {
-        log.info("Выдача была возвращена ранее.");
-        return ResponseEntity.status(HttpStatus.CONFLICT).body("Выдача была возвращена ранее.");
+    @PutMapping("/{issueId}")
+    public ResponseEntity<IssueDTO> returnIssue(@PathVariable long issueId) {
+        log.info("Received a request to return the issue: issueId={}", issueId);
+        return ResponseEntity.status(HttpStatus.OK).body(issueService.returnIssue(issueId));
     }
 }
