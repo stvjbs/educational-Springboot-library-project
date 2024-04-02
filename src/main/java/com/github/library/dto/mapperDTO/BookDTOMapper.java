@@ -11,6 +11,9 @@ public class BookDTOMapper {
     }
 
     public BookDTO mapToBookDTO(Book book) {
-        return new BookDTO(book.getName());
+        return BookDTO.builder()
+                .name(book.getName())
+                .id(book.getId())
+                .build();
     }
 }

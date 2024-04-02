@@ -11,8 +11,8 @@ public class ReaderDTOMapper {
     }
 
     public ReaderDTO mapToReaderDTO(Reader reader) {
-        return ReaderDTO.builder()
-                .name(reader.getName())
-                .build();
+        ReaderDTO readerDTO = new ReaderDTO(reader.getName());
+        readerDTO.setId(readerDTO.getId());
+        return readerDTO;
     }
 }

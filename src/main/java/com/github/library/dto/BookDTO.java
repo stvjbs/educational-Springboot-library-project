@@ -7,9 +7,12 @@ import lombok.Builder;
 import lombok.Data;
 
 @Data
+@Builder
 @AllArgsConstructor
 public class BookDTO {
     @NotBlank
     @Size(min = 3, message = "Name must be at least 3 characters long.")
-    private String name;
+    private final String name;
+
+    private long id;
 }
