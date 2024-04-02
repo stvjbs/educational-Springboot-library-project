@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Readers</title>
 </head>
 <body>
 <h1>Readers:</h1>
-<li th:each="reader: ${readers}" th:text="${reader}"></li>
+<li th:each="reader: ${readers}" th:text="${reader.getName()}"></li>
 </body>
 </html>

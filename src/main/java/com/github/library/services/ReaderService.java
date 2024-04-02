@@ -28,10 +28,10 @@ public class ReaderService {
         return readerDTOMapper.mapToReaderDTO(thisReader);
     }
 
-    public ReaderDTO addReader(ReaderDTO readerDTO) {
-        Reader reader = readerDTOMapper.mapToReader(readerDTO);
+    public ReaderDTO addReader(String readerName) {
+        Reader reader = new Reader(readerName);
         readerRepository.save(reader);
-        return readerDTO;
+        return readerDTOMapper.mapToReaderDTO(reader);
     }
 
     public void deleteReader(long readerId) {

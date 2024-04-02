@@ -34,19 +34,16 @@ public class IssueService {
     @Value("${spring.application.services.IssueService.maxAllowedBooks}")
     private int maxAllowedBooks;
 
-    public IssueDTO createIssue(IssueDTO request) {
-        Optional<Book> thisBook = bookRepository.findById(request.getBook().getId());
-        Optional<Reader> thisReader = readerRepository.findById(request.getReader().getId());
+    public IssueDTO createIssue(IssueDTO issueDTO) {
+        Optional<Book> thisBook = bookRepository.findById(issueDTO.getBookDTO().getId());
+        Optional<Reader> thisReader = readerRepository.findById(issueDTO.getReaderDTO().getId());
         if (thisBook.isEmpty() || thisReader.isEmpty()) throw new NotFoundEntityException();
 
         int countActiveIssues = issueRepository.countIssuesByReaderAndReturnedAtIsNull(thisReader.get());
         boolean isAllow = countActiveIssues < maxAllowedBooks;
 
         if (isAllow) {
-            Issue currentIssue = Issue.builder()
-                    .reader(thisReader.get())
-                    .book(thisBook.get())
-                    .build();
+            Issue currentIssue = issueDTOMapper.mapToIssue(issueDTO);
             issueRepository.save(currentIssue);
             return issueDTOMapper.mapToIssueDTO(currentIssue);
         } else throw new NotAllowException();

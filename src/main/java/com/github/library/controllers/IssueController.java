@@ -41,7 +41,7 @@ public class IssueController {
 
     @PostMapping()
     public ResponseEntity<IssueDTO> issueBook(@RequestBody @Valid IssueDTO issueDTO, Errors errors) {
-        log.info("Received a request to issue: readerId={}, bookId={}", issueDTO.getReader(), issueDTO.getBook());
+        log.info("Received a request to issue: readerId={}, bookId={}", issueDTO.getReaderDTO(), issueDTO.getBookDTO());
         if (errors.hasErrors()) throw new EntityValidationException();
         return ResponseEntity.status(HttpStatus.CREATED).body(issueService.createIssue(issueDTO));
     }

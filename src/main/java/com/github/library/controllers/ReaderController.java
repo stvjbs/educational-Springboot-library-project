@@ -31,12 +31,12 @@ public class ReaderController {
     }
 
     @PostMapping()
-    public ResponseEntity<ReaderDTO> addReader(@RequestBody @Valid ReaderDTO reader, Errors errors) {
+    public ResponseEntity<ReaderDTO> addReader(@RequestBody @Valid String readerName, Errors errors) {
         if (errors.hasErrors()) throw new EntityValidationException();
-        return ResponseEntity.status(HttpStatus.CREATED).body(readerService.addReader(reader));
+        return ResponseEntity.status(HttpStatus.CREATED).body(readerService.addReader(readerName));
     }
 
-    @DeleteMapping("{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteReader(@PathVariable long id) {
         readerService.deleteReader(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();

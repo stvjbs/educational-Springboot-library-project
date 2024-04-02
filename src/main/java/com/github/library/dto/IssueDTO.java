@@ -1,7 +1,5 @@
 package com.github.library.dto;
 
-import com.github.library.entity.Book;
-import com.github.library.entity.Reader;
 import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Data;
@@ -12,11 +10,11 @@ import java.time.LocalDateTime;
 @Builder
 public class IssueDTO {
     @NotNull
-    private Reader reader;
+    private ReaderDTO readerDTO;
     @NotNull
-    private Book book;
+    private BookDTO bookDTO;
 
     private LocalDateTime issuedAt;
     private LocalDateTime returnedAt;
-    private long id;
+    private final long id;
 }
