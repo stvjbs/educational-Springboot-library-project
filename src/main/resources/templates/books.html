@@ -6,7 +6,7 @@
 <body>
 <h1>Books:</h1>
 <ul>
-    <li th:each="book : ${books}" th:text="${book.getName()}"></li>
+    <li th:each="bookDTO : ${books}" th:text="${bookDTO.getName()}"></li>
 </ul>
 </body>
 </html>
