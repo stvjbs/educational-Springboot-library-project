@@ -1,20 +1,40 @@
-package com.github.library.controllers;
+package com.github.library.config;
 
 import com.github.library.exceptions.*;
+import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 @ControllerAdvice
 @Slf4j
 public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionHandler {
+    @Override
+    protected ResponseEntity<Object> handleMethodArgumentNotValid(
+            MethodArgumentNotValidException ex, @NonNull HttpHeaders headers,
+            @NonNull HttpStatusCode status, @NonNull WebRequest request) {
+        String error = ex.getBindingResult().getAllErrors().getLast().getDefaultMessage();
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
+    }
+
     @ExceptionHandler(NotFoundIssueException.class)
     public ResponseEntity<String> notFoundIssueExceptionHandler() {
         log.info("There is no such issue. Try again.");
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body("There is no such issue. Try again.");
+    }
+
+    @ExceptionHandler(DeletingUsedResourceException.class)
+    public ResponseEntity<String> deletingUsedResourceExceptionHandler() {
+        String message = "This resource is used in other table. It can't be replaced.";
+        log.info(message);
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(message);
     }
 
     @ExceptionHandler(NotFoundEntityException.class)

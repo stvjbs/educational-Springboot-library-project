@@ -22,11 +22,11 @@
         <th>Issued at</th>
         <th>Returned at</th>
     </tr>
-    <tr th:each="issue: ${issues}">
-        <th th:text="${issue.getBook().getName()}"></th>
-        <th th:text="${issue.getReader().getName()}"></th>
-        <th th:text="${issue.getIssuedAt()}"></th>
-        <th th:if="${issue.getReturnedAt()} != null"  th:text="${issue.getReturnedAt()}"></th>
+    <tr th:each="issueDTO: ${issues}">
+        <th th:text="${issueDTO.getBookDTO().getName()}"></th>
+        <th th:text="${issueDTO.getReaderDTO().getName()}"></th>
+        <th th:text="${issueDTO.getIssuedAt()}"></th>
+        <th th:if="${issueDTO.getReturnedAt()} != null"  th:text="${issueDTO.getReturnedAt()}"></th>
     </tr>
 </table>
 </body>

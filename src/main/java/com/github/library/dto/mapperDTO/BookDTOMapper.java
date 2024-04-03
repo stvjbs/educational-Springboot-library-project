@@ -4,6 +4,8 @@ import com.github.library.dto.BookDTO;
 import com.github.library.entity.Book;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 @Component
 public class BookDTOMapper {
     public Book mapToBook(BookDTO bookDTO) {
@@ -11,9 +13,12 @@ public class BookDTOMapper {
     }
 
     public BookDTO mapToBookDTO(Book book) {
-        return BookDTO.builder()
-                .name(book.getName())
-                .id(book.getId())
-                .build();
+        BookDTO bookDTO = new BookDTO(book.getName());
+        bookDTO.setId(book.getId());
+        return bookDTO;
+    }
+
+    public List<BookDTO> mapToListDTO(List<Book> list) {
+        return list.stream().map(this::mapToBookDTO).toList();
     }
 }
