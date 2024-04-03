@@ -17,18 +17,15 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @EnableConfigurationProperties
 @RequiredArgsConstructor
 @Slf4j
-@Transactional
 public class IssueService {
     private final IssueRepository issueRepository;
     private final ReaderRepository readerRepository;
@@ -38,17 +35,18 @@ public class IssueService {
     private int maxAllowedBooks;
 
     public IssueDTO createIssue(IssueDTO issueDTO) {
-        Optional<Book> thisBook = bookRepository.findById(issueDTO.getBookDTO().getId());
-        Optional<Reader> thisReader = readerRepository.findById(issueDTO.getReaderDTO().getId());
-        if (thisBook.isEmpty() || thisReader.isEmpty()) throw new NotFoundEntityException();
+        Book thisBook = bookRepository.findById(issueDTO.getBookDTO().getId())
+                .orElseThrow(NotFoundEntityException::new);
+        Reader thisReader = readerRepository.findById(issueDTO.getReaderDTO().getId())
+                .orElseThrow(NotFoundEntityException::new);
 
-        int countActiveIssues = issueRepository.countIssuesByReaderAndReturnedAtIsNull(thisReader.get());
+        int countActiveIssues = issueRepository.countIssuesByReaderAndReturnedAtIsNull(thisReader);
         boolean isAllow = countActiveIssues < maxAllowedBooks;
 
         if (isAllow) {
             Issue currentIssue = Issue.builder()
-                    .book(thisBook.get())
-                    .reader(thisReader.get())
+                    .book(thisBook)
+                    .reader(thisReader)
                     .issuedAt(LocalDateTime.now())
                     .returnedAt(null)
                     .build();
@@ -72,7 +70,7 @@ public class IssueService {
 
     public IssueDTO returnIssue(long issueId) {
         Issue thisIssue = issueRepository.findById(issueId)
-                .orElseThrow(NotFoundEntityException::new);
+                .orElseThrow(NotFoundIssueException::new);
         if (thisIssue.getReturnedAt() == null) {
             thisIssue.setReturnedAt(LocalDateTime.now());
             issueRepository.flush();

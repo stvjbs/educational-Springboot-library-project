@@ -10,5 +10,6 @@ import java.util.List;
 @Repository
 public interface IssueRepository extends JpaRepository<Issue, Long> {
     List<Issue> findAllByReader(Reader reader);
+
     int countIssuesByReaderAndReturnedAtIsNull(Reader reader);
 }

@@ -11,7 +11,7 @@ import lombok.RequiredArgsConstructor;
 @NoArgsConstructor
 public class BookDTO {
     @NonNull
-    @Size(min = 3)
+    @Size(min = 3, message = "Name must exists at least 3 characters long.")
     private String name;
 
     private long id;
