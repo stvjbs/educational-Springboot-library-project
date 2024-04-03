@@ -1,9 +1,9 @@
 package com.github.library.entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
 @Entity
@@ -16,7 +16,7 @@ public class Book {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     @Column(name = "Name")
-    @NotBlank
-    private final String name;
+    @NonNull
+    private String name;
 
 }

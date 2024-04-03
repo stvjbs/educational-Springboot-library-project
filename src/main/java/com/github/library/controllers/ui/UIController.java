@@ -1,6 +1,6 @@
 package com.github.library.controllers.ui;
 
-import com.github.library.entity.Book;
+import com.github.library.dto.BookDTO;
 import com.github.library.services.BookService;
 import com.github.library.services.IssueService;
 import com.github.library.services.ReaderService;
@@ -44,9 +44,9 @@ public class UIController {
     public String issuesOfReader(@PathVariable long id, Model model) {
         model.addAttribute("name", readerService.getReaderById(id).getName());
         model.addAttribute("id", id);
-        List<Book> books = new ArrayList<>();
+        List<BookDTO> books = new ArrayList<>();
         issueService.findIssueByReaderId(id)
-                .forEach(x -> books.add(bookService.getBookById(x.getBook().getId())));
+                .forEach(x -> books.add(bookService.getBookById(x.getBookDTO().getId())));
         model.addAttribute("books", books);
         return "reader";
     }

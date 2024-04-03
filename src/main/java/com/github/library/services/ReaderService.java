@@ -1,7 +1,9 @@
 package com.github.library.services;
 
 import com.github.library.dto.ReaderDTO;
+import com.github.library.dto.mapperDTO.ReaderDTOMapper;
 import com.github.library.entity.Reader;
+import com.github.library.exceptions.NotFoundEntityException;
 import com.github.library.repository.ReaderRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -12,23 +14,24 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ReaderService {
     private final ReaderRepository readerRepository;
+    private final ReaderDTOMapper readerDTOMapper;
 
-    public List<Reader> getAllReaders() {
-        return readerRepository.findAll();
+    public List<ReaderDTO> getAllReaders() {
+        return readerDTOMapper.mapToListDTO(readerRepository.findAll());
     }
 
-    public Reader getReaderById(long id) {
-        return readerRepository.findById(id).get();
+    public ReaderDTO getReaderById(long id) {
+        Reader thisReader = readerRepository.findById(id).orElseThrow(NotFoundEntityException::new);
+        return readerDTOMapper.mapToReaderDTO(thisReader);
     }
 
-    public Reader addReader(ReaderDTO readerDTO) {
-        Reader reader = new Reader(readerDTO.getName());
-        return readerRepository.save(reader);
+    public ReaderDTO addReader(ReaderDTO readerDTO) {
+        Reader reader = readerDTOMapper.mapToReader(readerDTO);
+        readerRepository.save(reader);
+        return readerDTOMapper.mapToReaderDTO(reader);
     }
 
-    public Reader deleteReader(long readerId) {
-        Reader reader = readerRepository.findById(readerId).get();
-        readerRepository.delete(reader);
-        return reader;
+    public void deleteReader(long readerId) {
+        readerRepository.deleteReaderById(readerId).orElseThrow(NotFoundEntityException::new);
     }
 }

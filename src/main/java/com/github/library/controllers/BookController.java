@@ -1,11 +1,10 @@
 package com.github.library.controllers;
 
 import com.github.library.dto.BookDTO;
-import com.github.library.entity.Book;
 import com.github.library.exceptions.EntityValidationException;
 import com.github.library.services.BookService;
 import jakarta.validation.Valid;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,36 +14,30 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("book")
-@AllArgsConstructor
+@RequestMapping("/book")
+@RequiredArgsConstructor
 @Slf4j
 public class BookController {
-    BookService bookService;
-
+    private final BookService bookService;
     @GetMapping()
-    public ResponseEntity<List<Book>> getAllBooks() {
+    public ResponseEntity<List<BookDTO>> getAllBooks() {
         return ResponseEntity.status(HttpStatus.OK).body(bookService.getAllBooks());
     }
 
-    @GetMapping("{id}")
-    public ResponseEntity<Book> getBook(@PathVariable long id) {
+    @GetMapping("/{id}")
+    public ResponseEntity<BookDTO> getBook(@PathVariable long id) {
         return ResponseEntity.status(HttpStatus.OK).body(bookService.getBookById(id));
     }
 
     @PostMapping()
-    public ResponseEntity<Book> addBook(@RequestBody @Valid BookDTO bookDTO, Errors errors) {
+    public ResponseEntity<BookDTO> addBook(@RequestBody @Valid BookDTO bookDTO, Errors errors) {
         if (errors.hasErrors()) throw new EntityValidationException();
         return ResponseEntity.status(HttpStatus.CREATED).body(bookService.addBook(bookDTO));
     }
 
-    @DeleteMapping("{id}")
-    public ResponseEntity<Book> deleteBook(@PathVariable long id) {
-        return ResponseEntity.status(HttpStatus.OK).body(bookService.deleteBook(id));
-    }
-
-    @ExceptionHandler(EntityValidationException.class)
-    public ResponseEntity<String> nameValidationExceptionHandler() {
-        log.info("Name validation error.");
-        return ResponseEntity.status(HttpStatus.CONFLICT).body("Name must exists at least 3 characters.");
+    @DeleteMapping("/{id}") //TODO!
+    public ResponseEntity<Void> deleteBook(@PathVariable long id) {
+        bookService.deleteBook(id);
+        return ResponseEntity.ok().build();
     }
 }
