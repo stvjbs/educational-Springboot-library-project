@@ -11,19 +11,14 @@ import org.springframework.security.web.SecurityFilterChain;
 @Slf4j
 public class SecurityConfiguration {
     @Bean
-    SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) {
-        try {
+    SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
             return httpSecurity
                     .authorizeHttpRequests(registry -> registry
+                            .requestMatchers("ui/books/**").hasAnyAuthority("user", "admin")
                             .requestMatchers("ui/**").hasAuthority("admin")
-                            .requestMatchers("ui/books/**").hasAnyAuthority("admin", "user")
-                            .anyRequest().denyAll()
+                            .anyRequest().permitAll()
                     )
                     .formLogin(Customizer.withDefaults())
                     .build();
-        } catch (Exception e) {
-            log.info(e.getMessage());
-            return null;
-        }
     }
 }
