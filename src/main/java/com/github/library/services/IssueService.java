@@ -8,6 +8,7 @@ import com.github.library.entity.Reader;
 import com.github.library.exceptions.AlreadyReturnedException;
 import com.github.library.exceptions.NotAllowException;
 import com.github.library.exceptions.NotFoundEntityException;
+import com.github.library.exceptions.NotFoundIssueException;
 import com.github.library.repository.BookRepository;
 import com.github.library.repository.IssueRepository;
 import com.github.library.repository.ReaderRepository;
@@ -16,6 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -26,6 +28,7 @@ import java.util.Optional;
 @EnableConfigurationProperties
 @RequiredArgsConstructor
 @Slf4j
+@Transactional
 public class IssueService {
     private final IssueRepository issueRepository;
     private final ReaderRepository readerRepository;
@@ -43,7 +46,12 @@ public class IssueService {
         boolean isAllow = countActiveIssues < maxAllowedBooks;
 
         if (isAllow) {
-            Issue currentIssue = issueDTOMapper.mapToIssue(issueDTO);
+            Issue currentIssue = Issue.builder()
+                    .book(thisBook.get())
+                    .reader(thisReader.get())
+                    .issuedAt(LocalDateTime.now())
+                    .returnedAt(null)
+                    .build();
             issueRepository.save(currentIssue);
             return issueDTOMapper.mapToIssueDTO(currentIssue);
         } else throw new NotAllowException();
@@ -51,7 +59,7 @@ public class IssueService {
 
     public IssueDTO findIssueById(long id) {
         return issueDTOMapper
-                .mapToIssueDTO(issueRepository.findById(id).orElseThrow(NotFoundEntityException::new));
+                .mapToIssueDTO(issueRepository.findById(id).orElseThrow(NotFoundIssueException::new));
     }
 
     public List<IssueDTO> findIssueByReaderId(long idReader) {
@@ -73,9 +81,7 @@ public class IssueService {
     }
 
     public List<IssueDTO> getAllIssues() {
-        List<IssueDTO> list = new ArrayList<>();
-        issueRepository.findAll().forEach(x -> list.add(issueDTOMapper.mapToIssueDTO(x)));
-        return list;
+        return issueDTOMapper.mapToListDTO(issueRepository.findAll());
     }
 
 }

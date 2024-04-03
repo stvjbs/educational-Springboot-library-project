@@ -16,5 +16,5 @@ public class IssueDTO {
 
     private LocalDateTime issuedAt;
     private LocalDateTime returnedAt;
-    private final long id;
+    private long id;
 }

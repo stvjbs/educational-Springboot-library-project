@@ -25,9 +25,7 @@ public class Issue {
     private Book book;
 
     @Column(name = "Issued_at")
-    @Builder.Default
     private LocalDateTime issuedAt = LocalDateTime.now();
     @Column(name = "Returned_at")
-    @Builder.Default
     private LocalDateTime returnedAt = null;
 }

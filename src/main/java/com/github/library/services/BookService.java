@@ -7,19 +7,19 @@ import com.github.library.exceptions.NotFoundEntityException;
 import com.github.library.repository.BookRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class BookService {
     private final BookRepository bookRepository;
     private final BookDTOMapper bookDTOMapper;
+
     public List<BookDTO> getAllBooks() {
-        List<BookDTO> list = new ArrayList<>();
-        bookRepository.findAll().forEach(x->list.add(bookDTOMapper.mapToBookDTO(x)));
-        return list;
+        return bookDTOMapper.mapToListDTO(bookRepository.findAll());
     }
 
     public BookDTO getBookById(long id) {
@@ -30,10 +30,10 @@ public class BookService {
     public BookDTO addBook(BookDTO bookDTO) {
         Book book = bookDTOMapper.mapToBook(bookDTO);
         bookRepository.save(book);
-        return bookDTO;
+        return bookDTOMapper.mapToBookDTO(book);
     }
 
     public void deleteBook(long bookId) {
-       bookRepository.deleteBookById(bookId).orElseThrow(NotFoundEntityException::new);
+        bookRepository.deleteBookById(bookId).orElseThrow(NotFoundEntityException::new);
     }
 }

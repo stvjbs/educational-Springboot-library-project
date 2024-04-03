@@ -30,14 +30,14 @@ public class BookController {
     }
 
     @PostMapping()
-    public ResponseEntity<BookDTO> addBook(@RequestBody @Valid BookDTO bookDTO, Errors errors) { //request @delete
+    public ResponseEntity<BookDTO> addBook(@RequestBody @Valid BookDTO bookDTO, Errors errors) {
         if (errors.hasErrors()) throw new EntityValidationException();
         return ResponseEntity.status(HttpStatus.CREATED).body(bookService.addBook(bookDTO));
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{id}") //TODO!
     public ResponseEntity<Void> deleteBook(@PathVariable long id) {
         bookService.deleteBook(id);
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        return ResponseEntity.ok().build();
     }
 }
