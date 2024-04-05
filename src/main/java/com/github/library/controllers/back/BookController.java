@@ -1,5 +1,6 @@
-package com.github.library.controllers;
+package com.github.library.controllers.back;
 
+import com.github.library.config.aspect.timer.Timer;
 import com.github.library.dto.BookDTO;
 import com.github.library.services.BookService;
 import jakarta.validation.Valid;
@@ -15,6 +16,7 @@ import java.util.List;
 @RequestMapping("/book")
 @RequiredArgsConstructor
 @Slf4j
+@Timer
 public class BookController {
     private final BookService bookService;
 

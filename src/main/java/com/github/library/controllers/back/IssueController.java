@@ -1,5 +1,6 @@
-package com.github.library.controllers;
+package com.github.library.controllers.back;
 
+import com.github.library.config.aspect.timer.Timer;
 import com.github.library.dto.IssueDTO;
 import com.github.library.exceptions.EntityValidationException;
 import com.github.library.services.IssueService;
@@ -17,6 +18,7 @@ import java.util.List;
 @RequestMapping("/issue")
 @RequiredArgsConstructor
 @Slf4j
+@Timer
 public class IssueController {
     private final IssueService issueService;
 
@@ -40,6 +42,7 @@ public class IssueController {
     }
 
     @PostMapping()
+
     public ResponseEntity<IssueDTO> issueBook(@RequestBody @Valid IssueDTO issueDTO, Errors errors) {
         log.info("Received a request to issue: readerId={}, bookId={}", issueDTO.getReaderDTO(), issueDTO.getBookDTO());
         if (errors.hasErrors()) throw new EntityValidationException();
