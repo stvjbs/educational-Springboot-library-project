@@ -1,4 +1,4 @@
 package com.github.library.exceptions;
 
-public class NotAllowException extends RuntimeException{
+public class NotAllowException extends RuntimeException {
 }
