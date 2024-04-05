@@ -12,13 +12,16 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SecurityConfiguration {
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
-            return httpSecurity
-                    .authorizeHttpRequests(registry -> registry
-                            .requestMatchers("ui/books/**").hasAnyAuthority("user", "admin")
-                            .requestMatchers("ui/**").hasAuthority("admin")
-                            .anyRequest().permitAll()
-                    )
-                    .formLogin(Customizer.withDefaults())
-                    .build();
+        return httpSecurity
+                .authorizeHttpRequests(registry -> registry
+                        .requestMatchers("ui/books/**").hasAnyAuthority("user", "admin")
+                        .requestMatchers("ui/**").hasAuthority("admin")
+                        .anyRequest().permitAll()
+                )
+                .csrf(httpSecurityCsrfConfigurer -> httpSecurityCsrfConfigurer
+                        .ignoringRequestMatchers("/book/**", "/issue/**", "/reader/**"))
+                .formLogin(Customizer.withDefaults())
+                .build();
     }
+
 }
