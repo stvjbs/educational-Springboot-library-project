@@ -1,5 +1,6 @@
-package com.github.library.controllers;
+package com.github.library.controllers.back;
 
+import com.github.library.config.aspect.timer.Timer;
 import com.github.library.dto.ReaderDTO;
 import com.github.library.exceptions.EntityValidationException;
 import com.github.library.services.ReaderService;
@@ -17,6 +18,7 @@ import java.util.List;
 @RequestMapping("reader")
 @RequiredArgsConstructor
 @Slf4j
+@Timer
 public class ReaderController {
     private final ReaderService readerService;
 

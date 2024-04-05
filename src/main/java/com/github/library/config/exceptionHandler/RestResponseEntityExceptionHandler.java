@@ -1,4 +1,4 @@
-package com.github.library.config;
+package com.github.library.config.exceptionHandler;
 
 import com.github.library.exceptions.*;
 import lombok.NonNull;

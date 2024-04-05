@@ -5,6 +5,7 @@ import com.github.library.services.BookService;
 import com.github.library.services.IssueService;
 import com.github.library.services.ReaderService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,6 +18,7 @@ import java.util.List;
 @Controller
 @RequestMapping("ui")
 @RequiredArgsConstructor
+@EnableWebSecurity
 public class UIController {
     private final BookService bookService;
     private final ReaderService readerService;
