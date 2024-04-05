@@ -33,9 +33,9 @@ public class ReaderController {
     }
 
     @PostMapping()
-    public ResponseEntity<ReaderDTO> addReader(@RequestBody @Valid String readerName, Errors errors) {
+    public ResponseEntity<ReaderDTO> addReader(@RequestBody @Valid ReaderDTO readerDTO, Errors errors) {
         if (errors.hasErrors()) throw new EntityValidationException();
-        return ResponseEntity.status(HttpStatus.CREATED).body(readerService.addReader(readerName));
+        return ResponseEntity.status(HttpStatus.CREATED).body(readerService.addReader(readerDTO));
     }
 
     @DeleteMapping("/{id}")
@@ -44,4 +44,3 @@ public class ReaderController {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }
-

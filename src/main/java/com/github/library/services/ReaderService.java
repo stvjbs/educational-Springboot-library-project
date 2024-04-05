@@ -8,7 +8,6 @@ import com.github.library.repository.ReaderRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -18,9 +17,7 @@ public class ReaderService {
     private final ReaderDTOMapper readerDTOMapper;
 
     public List<ReaderDTO> getAllReaders() {
-        List<ReaderDTO> list = new ArrayList<>();
-        readerRepository.findAll().forEach(x -> list.add(readerDTOMapper.mapToReaderDTO(x)));
-        return list;
+        return readerDTOMapper.mapToListDTO(readerRepository.findAll());
     }
 
     public ReaderDTO getReaderById(long id) {
@@ -28,8 +25,8 @@ public class ReaderService {
         return readerDTOMapper.mapToReaderDTO(thisReader);
     }
 
-    public ReaderDTO addReader(String readerName) {
-        Reader reader = new Reader(readerName);
+    public ReaderDTO addReader(ReaderDTO readerDTO) {
+        Reader reader = readerDTOMapper.mapToReader(readerDTO);
         readerRepository.save(reader);
         return readerDTOMapper.mapToReaderDTO(reader);
     }

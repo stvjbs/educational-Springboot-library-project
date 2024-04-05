@@ -1,8 +1,7 @@
 package com.github.library.dto;
 
 import jakarta.validation.constraints.NotNull;
-import lombok.Builder;
-import lombok.Data;
+import lombok.*;
 
 import java.time.LocalDateTime;
 

@@ -2,14 +2,12 @@ package com.github.library.controllers.back;
 
 import com.github.library.config.aspect.timer.Timer;
 import com.github.library.dto.IssueDTO;
-import com.github.library.exceptions.EntityValidationException;
 import com.github.library.services.IssueService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -42,10 +40,8 @@ public class IssueController {
     }
 
     @PostMapping()
-
-    public ResponseEntity<IssueDTO> issueBook(@RequestBody @Valid IssueDTO issueDTO, Errors errors) {
+    public ResponseEntity<IssueDTO> issueBook(@RequestBody @Valid IssueDTO issueDTO) {
         log.info("Received a request to issue: readerId={}, bookId={}", issueDTO.getReaderDTO(), issueDTO.getBookDTO());
-        if (errors.hasErrors()) throw new EntityValidationException();
         return ResponseEntity.status(HttpStatus.CREATED).body(issueService.createIssue(issueDTO));
     }
 
