@@ -1,6 +1,5 @@
 package com.github.library.controllers.back;
 
-import com.github.library.config.aspect.timer.Timer;
 import com.github.library.dto.IssueDTO;
 import com.github.library.services.IssueService;
 import jakarta.validation.Valid;
@@ -16,7 +15,6 @@ import java.util.List;
 @RequestMapping("/issue")
 @RequiredArgsConstructor
 @Slf4j
-@Timer
 public class IssueController {
     private final IssueService issueService;
 

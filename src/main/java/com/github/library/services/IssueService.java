@@ -1,5 +1,6 @@
 package com.github.library.services;
 
+import com.github.library.config.aspect.timer.Timer;
 import com.github.library.dto.IssueDTO;
 import com.github.library.dto.mapperDTO.IssueDTOMapper;
 import com.github.library.entity.Book;
@@ -26,6 +27,7 @@ import java.util.List;
 @EnableConfigurationProperties
 @RequiredArgsConstructor
 @Slf4j
+@Timer
 public class IssueService {
     private final IssueRepository issueRepository;
     private final ReaderRepository readerRepository;

@@ -1,5 +1,6 @@
 package com.github.library.services;
 
+import com.github.library.config.aspect.timer.Timer;
 import com.github.library.dto.BookDTO;
 import com.github.library.dto.mapperDTO.BookDTOMapper;
 import com.github.library.entity.Book;
@@ -7,13 +8,12 @@ import com.github.library.exceptions.NotFoundEntityException;
 import com.github.library.repository.BookRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-@Transactional
+@Timer
 public class BookService {
     private final BookRepository bookRepository;
     private final BookDTOMapper bookDTOMapper;

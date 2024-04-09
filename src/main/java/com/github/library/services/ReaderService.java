@@ -1,5 +1,6 @@
 package com.github.library.services;
 
+import com.github.library.config.aspect.timer.Timer;
 import com.github.library.dto.ReaderDTO;
 import com.github.library.dto.mapperDTO.ReaderDTOMapper;
 import com.github.library.entity.Reader;
@@ -12,6 +13,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Timer
 public class ReaderService {
     private final ReaderRepository readerRepository;
     private final ReaderDTOMapper readerDTOMapper;
