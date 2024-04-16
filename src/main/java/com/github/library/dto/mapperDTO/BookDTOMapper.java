@@ -21,4 +21,5 @@ public class BookDTOMapper {
     public List<BookDTO> mapToListDTO(List<Book> list) {
         return list.stream().map(this::mapToBookDTO).toList();
     }
+
 }
