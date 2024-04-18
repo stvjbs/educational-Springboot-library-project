@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 @Component
 @Slf4j
 public class TimerAspect {
-    @Around("@annotation(com.github.library.config.aspect.timer.Timer) || @within(com.github.library.config.aspect.timer.Timer)")
+    @Around("@annotation(com.github.library.config.aspect.timer.TimerCustomAnnotation) || @within(com.github.library.config.aspect.timer.TimerCustomAnnotation)")
     public Object timerMethod(ProceedingJoinPoint joinPoint) throws Throwable {
         long startTime = System.currentTimeMillis();
         Object proceed = joinPoint.proceed();

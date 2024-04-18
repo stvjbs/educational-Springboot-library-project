@@ -1,6 +1,6 @@
 package com.github.library.services;
 
-import com.github.library.config.aspect.timer.Timer;
+import com.github.library.config.aspect.timer.TimerCustomAnnotation;
 import com.github.library.dto.BookDTO;
 import com.github.library.dto.mapperDTO.BookDTOMapper;
 import com.github.library.entity.Book;
@@ -13,7 +13,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-@Timer
+@TimerCustomAnnotation
 public class BookService {
     private final BookRepository bookRepository;
     private final BookDTOMapper bookDTOMapper;

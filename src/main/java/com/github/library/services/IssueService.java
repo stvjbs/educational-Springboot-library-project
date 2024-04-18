@@ -1,6 +1,8 @@
 package com.github.library.services;
 
-import com.github.library.config.aspect.timer.Timer;
+import com.github.library.config.aspect.counter.issueCounter.CounterIssue;
+import com.github.library.config.aspect.counter.issueRefuseCounter.CounterRefuseIssue;
+import com.github.library.config.aspect.timer.TimerCustomAnnotation;
 import com.github.library.dto.IssueDTO;
 import com.github.library.dto.mapperDTO.IssueDTOMapper;
 import com.github.library.entity.Book;
@@ -27,7 +29,7 @@ import java.util.List;
 @EnableConfigurationProperties
 @RequiredArgsConstructor
 @Slf4j
-@Timer
+@TimerCustomAnnotation
 public class IssueService {
     private final IssueRepository issueRepository;
     private final ReaderRepository readerRepository;
@@ -36,6 +38,9 @@ public class IssueService {
     @Value("${spring.application.services.IssueService.maxAllowedBooks}")
     private int maxAllowedBooks;
 
+    @CounterIssue
+    @CounterRefuseIssue
+    @TimerCustomAnnotation
     public IssueDTO createIssue(IssueDTO issueDTO) {
         Book thisBook = bookRepository.findById(issueDTO.getBookDTO().getId())
                 .orElseThrow(NotFoundEntityException::new);
